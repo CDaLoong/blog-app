@@ -52,3 +52,42 @@ exports.setArticle = (req, res, next) => {
         })
     }
 }
+// 文章发布和删除
+exports.showArticle = (req, res, next) => {
+    // 获取传递的值
+    let key = req.headers.fapp + ":article:" + req.body.a_id
+    redis.get(key).then((data) => {
+        if(!data) res.json(util.getReturnData(404, "没有该文章"))
+        // 修改显示
+        if (data.show == 1) {
+            data.show = 0
+        } else {
+            data.show = 1
+        }
+        redis.set(key, data)
+    })
+    res.json(util.getReturnData(0, "文章修改成功"))
+}
+
+// 发布分类
+exports.setArticleType = (req, res, next) => {
+    // 获取传递的值
+    // 应当确定的是type中对应的唯一key是不重复的
+    let data = req.body.type
+    console.log(data)
+    let key = req.headers.fapp + ':a_type'
+    // 根据key直接更新内容
+    redis.set(key, data)
+    // 循环整个传递的值，一次创建唯一ID对应的键值对
+    data.map((item) => {
+        console.log(item.uid)
+        let tKey = req.headers.fapp + ':a_type:' + item.uid
+        redis.get(tKey).then((data1) => {
+            // 不存在则添加
+            if(!data1) {
+                redis.set(tKey, {})
+            }
+        })
+    })
+    res.json(util.getReturnData(0, "创建分类成功"))
+}
