@@ -1,7 +1,7 @@
 var express = require('express')
 var router = express.Router()
 // 引入处理逻辑的JavaScript文件（需要注意是否有路由用到其他文件，这里只展示本小节使用文件，如果要是用其他文件均需要引入）
-var{ setArticle, showArticle, setArticleType } = require('../controller/admin')
+var{ setArticle, showArticle, setArticleType, getAllUser, stopLogin, setIndexPic, setNavMenu, setFooter, setLinks } = require('../controller/admin')
 
 
 // 发布文章
@@ -10,10 +10,18 @@ router.post('/setArticle', setArticle)
 router.post('/showArticle', showArticle)
 // 分类的发布
 router.post('/setArticleType', setArticleType)
-
-
-
-
+// 获取所有的用户
+router.get('/getAllUser', getAllUser)
+// 用户封停操作
+router.get('/stopLogin/:id', stopLogin)
+// 修改首页轮播图
+router.post('/setIndexPic', setIndexPic)
+// 修改导航菜单
+router.post('/changeNav', setNavMenu)
+// 底部内容修改
+router.post('/setFooter', setFooter)
+// 友情链接
+router.post('/setLinks', setLinks)
 
 
 

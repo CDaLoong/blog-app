@@ -68,25 +68,54 @@ exports.getHotArticle = (req, res, next) => {
 // 获取最新的文章列表
 exports.getNewArticle = (req, res, next) => {
     let key = req.headers.fapp + ':a_time'
+    let isAdmin = false
     // 获取数据
     console.log(key)
     // 获取集合
-    redis.zrevrange(key, 0, -1).then(async data => {
-        console.log(data)
-        let result = data.map(item => {
-            // 获取每篇文章的题目、ID及日期
-            return redis.get(item.member).then(data1 => {
-                console.log(data1)
-                if (data1 && data1.show !== 0) {
-                    return { 'title': data1.title, 'date': util.getLocalDate(item.score), 'id': data1.a_id}
-                } else {
-                    return {'title': '文章暂未上线', 'date': '', 'id': 0}
-                }
-            })
+    // 登录用户才判断
+    if('token' in req.headers) {
+        // 如果是管理员，则应当获得所有文章
+        let pKey = req.headers.fapp + ":user:power:" + req.headers.token
+        redis.get(pKey).then((power) => {
+            // 管理员权限
+            if(power == 'admin') {
+                redis.zrevrange(key, 0, -1).then(async(data) => {
+                    let result = data.map((item) => {
+                        // 获取每篇文章的题目、ID及日期
+                        return redis.get(item.member).then((data1) => {
+                            console.log(data1)
+                            if (data1) {
+                                return { 'title': data1.title, 'date': util.getLocalDate(item.score), 'id': data1.a_id, 'show': data1.show }
+                            }
+                        })
+                    })
+                    let t_data = await Promise.all(result)
+                    console.log(t_data)
+                    res.json(util.getReturnData(0, '', t_data ))
+                })
+            } else {
+                res.json(util.getReturnData(1, '其他权限'))
+                //其它权限
+            }
         })
-        let t_data = await Promise.all(result)
-        res.json(util.getReturnData(0, '', t_data))
-    })
+    } else {
+        redis.zrevrange(key, 0, -1).then(async data => {
+            console.log(data)
+            let result = data.map(item => {
+                // 获取每篇文章的题目、ID及日期
+                return redis.get(item.member).then(data1 => {
+                    console.log(data1)
+                    if (data1 && data1.show !== 0) {
+                        return { 'title': data1.title, 'date': util.getLocalDate(item.score), 'id': data1.a_id}
+                    } else {
+                        return {'title': '文章暂未上线', 'date': '', 'id': 0}
+                    }
+                })
+            })
+            let t_data = await Promise.all(result)
+            res.json(util.getReturnData(0, '', t_data))
+        })
+    }
 }
 
 // 根据ID获取文章的基本内容

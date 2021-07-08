@@ -91,3 +91,112 @@ exports.setArticleType = (req, res, next) => {
     })
     res.json(util.getReturnData(0, "创建分类成功"))
 }
+
+// 获取全部用户
+exports.getAllUser = (req, res, next) => {
+    // 获取用户key值的模式
+    let re = req.headers.fapp + ':user:info:*'
+    // 注意这里使用的scan()方法，这里可以传入游标和个数
+    redis.scan(re).then(async(data) => {
+        // 这里通过循环用户的详细资料
+        let result = data[1].map((item) => {
+            // 获取每个用户的username
+            return redis.get(item).then((user) => {
+                return { 'username': user.username, 'login': user.login, 'ip': user.ip }
+            })
+        })
+        let t_data = await Promise.all(result)
+        res.json(util.getReturnData(0, "", t_data))
+    })
+}
+
+// 封停用户
+exports.stopLogin = (req, res, next) => {
+    // 获取传递的值
+    let key = req.headers.fapp + ':user:info:' + req.params.id
+    redis.get(key).then((user) => {
+        if(user.login == 0) {
+            user.login = 1
+        } else {
+            user.login = 0
+        }
+        redis.set(key, user)
+        res.json(util.getReturnData(0, "用户修改成功"))
+    })
+}
+
+// 设置首页轮播图图片
+exports.setIndexPic = (req, res, next) => {
+    let key = req.headers.fapp + ":indexPic"
+    // 获取传递的值
+    let data = req.body.indexPic
+    console.log(data)
+    // 储存
+    redis.set(key, data)
+    res.json(util.getReturnData(0, '修改成功'))
+}
+
+let redis = require("../util/redisDB")
+const util = require('../util/common')
+// 修改导航菜单
+exports.setNavMenu = (req, res, next) => {
+    let key = req.headers.fapp + ":nav_menu"
+    // 获取传递的值
+    let data = req.body.nav_menu
+    console.log(data)
+    // 存储
+    redis.set(key, data)
+    res.json(util.getReturnData(0, '修改成功'))
+}
+
+// 修改底部内容
+exports.setFooter = (req, res, next) => {
+    let key = req.headers.fapp + ":footer"
+    // 获取传递的值
+    let data = req.body.footer
+    console.log(data)
+    // 存储
+    redis.set(key, data)
+    res.json(util.getReturnData(0, "修改成功"))
+}
+
+// 修改友情链接
+exports.setLinks = (req, res, next) => {
+    let key = req.headers.fapp + ":links"
+    // 获取传递的值
+    let data = req.body.links
+    console.log(data)
+    // 存储
+    redis.set(key, data)
+    res.json(util.getReturnData(0, '修改成功'))
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
