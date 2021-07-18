@@ -25,4 +25,12 @@ app.use('/', checkAPP, indexRouter);
 app.use('/users', checkAPP, usersRouter);
 app.use('/admin', [checkAPP, checkUser, checkAdmin], adminRouter)
 
+// 设置允许跨域访问该服务
+// 设置跨域访问
+app.all('*', function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*")
+    res.header("Access-Control-Allow-Headers", "*")
+    next()
+})
+
 module.exports = app;
