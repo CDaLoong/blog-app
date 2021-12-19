@@ -24,7 +24,7 @@ module.exports = {
    * In most cases please use '/' !!!
    * Detail: https://cli.vuejs.org/config/#publicpath
    */
-  publicPath: '/',
+  publicPath: '/admin',
   outputDir: 'dist',
   assetsDir: 'static',
   lintOnSave: process.env.NODE_ENV === 'development',
@@ -36,7 +36,19 @@ module.exports = {
       warnings: false,
       errors: true
     },
-    before: require('./mock/mock-server.js')
+    proxy:{
+      '/res' : {
+        target : 'http://127.0.0.1:7001'
+        // http://127.0.0.1:7001/res/captcha
+      },
+      '/api' : {
+        target : 'http://127.0.0.1:7001'
+      },
+      '/static' : {
+        target : 'http://127.0.0.1:7001'
+      }
+    }
+    // before: require('./mock/mock-server.js') 这行代码标识发送的请求使用 mock-server 来进行处理
   },
   configureWebpack: {
     // provide the app's title in webpack's name field, so that

@@ -51,7 +51,7 @@ export const constantRoutes = [
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: '控制台', icon: 'dashboard' }
+      meta: { title: '控制台', icon: 'dashboard', auth : true }
     }]
   },
 
@@ -93,8 +93,14 @@ export const constantRoutes = [
         component: () => import('@/views/addBlog/index'),
         meta: { title: '添加文章', icon: 'el-icon-circle-plus', auth: true }
       },
-
-
+      {
+        path: '/editBlog/:id',
+        name: 'editBlog',
+        hidden : true,
+        component: () => import('@/views/editBlog/index'),
+        meta: { title: '编辑文章', icon: 'el-icon-circle-plus', auth: true }
+      },
+     
     ]
   },
 
