@@ -129,9 +129,8 @@ export default {
     },
     editBannerConfirm(){
       // 从表单里面拿到用户修改的数据，发送给服务器
-      // 因为 api 文档要求三个首页标语都要发送过去，哪怕只改了其中一个
       let arr = [...this.data];
-      for(var i=0;i<arr.length;i++){
+      for(let i=0; i<arr.length; i++){
         if(arr[i].id == this.form.id){
           arr[i] = this.form
         }

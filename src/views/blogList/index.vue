@@ -44,7 +44,7 @@
       </el-table-column>
 
       <el-table-column prop="title" label="所属分类" width="150" align="center">
-        <template slot-scope="scope">{{ 
+        <template slot-scope="scope">{{
           scope.row.category === null ? '未分类' : scope.row.category.name
         }}</template>
       </el-table-column>
@@ -131,7 +131,7 @@ export default {
     fetchData() {
       findBlog(this.currentPage, this.eachPage).then(({ data }) => {
         this.data = data.rows;
-        for (var i of this.data) {
+        for (const i of this.data) {
           i.createDate = formatDate(i.createDate);
           // i.thumb = server_URL + i.thumb;
           this.srcList.push(i.thumb);

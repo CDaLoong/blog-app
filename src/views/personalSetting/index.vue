@@ -51,7 +51,7 @@
 import { getInfo, setUser } from "@/api/user.js";
 export default {
   data() {
-    var validatePass2 = (rule, value, callback) => {
+    const validatePass2 = (rule, value, callback) => {
       if (value === "") {
         callback(new Error("请再次输入新密码"));
       } else if (value !== this.adminInfo.loginPwd) {
