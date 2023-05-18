@@ -4,12 +4,12 @@ import request from '@/utils/request'
 export function getBanner() {
   return request({
     url: '/api/banner',
-    method: 'get',
+    method: 'get'
   })
 }
 
 // 设置首页标语
-export function setBanner(data){
+export function setBanner(data) {
   return request({
     url: '/api/banner',
     method: 'post',

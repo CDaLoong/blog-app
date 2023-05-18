@@ -98,13 +98,15 @@ export default {
     editor: Editor,
     Upload,
   },
+  mounted() {
+    console.log()
+  },
   methods: {
     addArticleHandle() {
       // 添加文章的业务逻辑 1. 获取表单内容   2. 发送请求
-
       let html = this.$refs.toastuiEditor.invoke("getHTML");
       let markdown = this.$refs.toastuiEditor.invoke("getMarkdown");
-
+      console.log(html, markdown)
       // 接下来，我们来组装要传递给服务器的对象
 
       let obj = {

@@ -47,44 +47,43 @@
       </el-select>
     </div>
 
-    <el-button type="primary" plain @click="addProjectHandle"
-      >发布项目</el-button
-    >
+    <el-button type="primary" plain @click="addProjectHandle"></el-button>
+      发布项目
+    </el-button>
   </div>
 </template>
 
 <script>
-import Upload from "@/components/Upload.vue";
-import {addProject} from '@/api/project.js'
+import Upload from '@/components/Upload.vue'
+import { addProject } from '@/api/project.js'
 export default {
   data() {
     return {
       form: {
-        name: "",
-        description: "",
-        url: "",
-        github: "",
-        thumb: "",
-        order: 1,
-      },
-    };
-  },
-  components: {
-    Upload,
-  },
-  methods: {
-    addProjectHandle(){
-        let obj = {...this.form};
-        obj.description = obj.description.split(',');
-        obj.order = parseInt(obj.order);
-        addProject(obj).then(()=>{
-            this.$router.push('/projectsList');
-            this.$message.success('添加项目成功');
-        })
-
+        name: '',
+        description: '',
+        url: '',
+        github: '',
+        thumb: '',
+        order: 1
+      }
     }
   },
-};
+  components: {
+    Upload
+  },
+  methods: {
+    addProjectHandle() {
+      let obj = { ...this.form }
+      obj.description = obj.description.split(',')
+      obj.order = parseInt(obj.order)
+      addProject(obj).then(() => {
+        this.$router.push('/projectsList')
+        this.$message.success('添加项目成功')
+      })
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

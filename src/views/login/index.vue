@@ -66,15 +66,11 @@
             auto-complete="on"
           />
         </el-form-item>
-        <div
-          class="captchaImg"
-          v-html="svg"
-          @click="getCaptchaFunc"
-        ></div>
+        <div class="captchaImg" v-html="svg" @click="getCaptchaFunc"></div>
       </div>
 
       <!-- 7 天内免登录 -->
-      <div style="margin-bottom:15px">
+      <div style="margin-bottom: 15px">
         <el-checkbox v-model="loginForm.checked">7 天内免登录</el-checkbox>
       </div>
 
@@ -83,135 +79,123 @@
         type="primary"
         style="width: 100%; margin-bottom: 30px"
         @click.native.prevent="handleLogin"
-        >登录</el-button
       >
+        登录
+      </el-button>
     </el-form>
   </div>
 </template>
 
 <script>
-import { validUsername } from "@/utils/validate";
-import {getCaptcha} from '@/api/captcha.js'
+// import { validUsername } from '@/utils/validate'
+import { getCaptcha } from '@/api/captcha.js'
 export default {
-  name: "Login",
+  name: 'Login',
   data() {
-    const validateUsername = (rule, value, callback) => {
-      if (!validUsername(value)) {
-        callback(new Error("Please enter the correct user name"));
-      } else {
-        callback();
-      }
-    };
-    const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback(new Error("The password can not be less than 6 digits"));
-      } else {
-        callback();
-      }
-    };
-
-    // 密码的验证
-    const checkPassword = (rule, value, callback) =>{
-      const reg = /abcd/;
-      if(reg.test(value)){
-        callback(); // 验证通过
-      } else {
-        callback(new Error('密码不符合XXX要求'));
-      }
-    }
-
     return {
-      svg : '',
-      loginForm : {
-        loginId : '',
-        loginPwd : '',
-        captcha : '',
-        checked : true,
+      svg: '',
+      loginForm: {
+        loginId: '',
+        loginPwd: '',
+        captcha: '',
+        checked: true
       },
-      loginRules : {
+      loginRules: {
         // 在这里书写各个字段的验证规则
-        loginId : [{
-          required : true, trigger : 'blur', message : '请输入管理员账号'
-        }],
-        loginPwd : [{
-          required : true, trigger : 'blur', message : '请输入管理员密码'
-        }],
-        captcha : [{
-          required : true, trigger : 'blur', message : '请输入验证码'
-        }]
+        loginId: [
+          {
+            required: true,
+            trigger: 'blur',
+            message: '请输入管理员账号'
+          }
+        ],
+        loginPwd: [
+          {
+            required: true,
+            trigger: 'blur',
+            message: '请输入管理员密码'
+          }
+        ],
+        captcha: [
+          {
+            required: true,
+            trigger: 'blur',
+            message: '请输入验证码'
+          }
+        ]
       },
-      passwordType : 'password',
-      loading : false
-    };
+      passwordType: 'password',
+      loading: false
+    }
   },
   watch: {
     $route: {
-      handler: function (route) {
-        this.redirect = route.query && route.query.redirect;
+      handler: (route) => {
+        this.redirect = route.query && route.query.redirect
       },
-      immediate: true,
-    },
+      immediate: true
+    }
   },
   created() {
     // 一进来就先从服务器获取验证码
-    this.getCaptchaFunc();
+    this.getCaptchaFunc()
   },
   methods: {
-    getCaptchaFunc(){
-      getCaptcha().then(res=>{
-        this.svg = res;
+    getCaptchaFunc() {
+      getCaptcha().then((res) => {
+        this.svg = res
       })
     },
     showPwd() {
-      if (this.passwordType === "password") {
-        this.passwordType = "";
+      if (this.passwordType === 'password') {
+        this.passwordType = ''
       } else {
-        this.passwordType = "password";
+        this.passwordType = 'password'
       }
       this.$nextTick(() => {
-        this.$refs.password.focus();
-      });
+        this.$refs.password.focus()
+      })
     },
     // 登录相关的方法
     handleLogin() {
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
-           // 进入此 if，说明表单的正则验证都是通过了的
-          this.loading = true;
+          // 进入此 if，说明表单的正则验证都是通过了的
+          this.loading = true
 
-          if(this.loginForm.checked){
-            this.loginForm.remember = 7;
+          if (this.loginForm.checked) {
+            this.loginForm.remember = 7
           }
 
           this.$store
-            .dispatch("user/login", this.loginForm)
+            .dispatch('user/login', this.loginForm)
             .then(() => {
-              this.$router.push({ path: this.redirect || "/" });
-              this.loading = false;
+              this.$router.push({ path: this.redirect || '/' })
+              this.loading = false
             })
             .catch((res) => {
               // this.loading = false;
-              if(typeof res === 'string'){
+              if (typeof res === 'string') {
                 // 说明是验证码错误
-                this.$message.error('验证码错误');
+                this.$message.error('验证码错误')
               } else {
                 // 说明是账号密码错误
-                this.$message.error('账号密码错误');
+                this.$message.error('账号密码错误')
               }
               // 接下来需要重新请求二维码
-              this.getCaptchaFunc();
-              this.loading = false;
-              this.loginForm.captcha = '';
-            });
+              this.getCaptchaFunc()
+              this.loading = false
+              this.loginForm.captcha = ''
+            })
         } else {
           // 说明表单有某些字段的验证没有通过
-          console.log("error submit!!");
-          return false;
+          console.log('error submit!!')
+          return false
         }
-      });
-    },
-  },
-};
+      })
+    }
+  }
+}
 </script>
 
 <style lang="scss">
@@ -324,16 +308,15 @@ $light_gray: #eee;
   }
 }
 
-.captchaInputer{
+.captchaInputer {
   width: 70%;
 }
-.captchaContainer{
+.captchaContainer {
   display: flex;
 }
-.captchaImg{
+.captchaImg {
   width: 150px;
   height: 50px;
   margin-left: 5px;
 }
-
 </style>

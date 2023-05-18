@@ -19,9 +19,9 @@
       <!-- 项目名称 -->
       <el-table-column align="center" label="项目名称" width="150">
         <template slot-scope="scope">
-          <a :href="scope.row.url" target="_blank" class="proName">{{
-            scope.row.name
-          }}</a>
+          <a :href="scope.row.url" target="_blank" class="proName">
+            {{ scope.row.name }}
+          </a>
         </template>
       </el-table-column>
 
@@ -39,8 +39,7 @@
             style="width: 120px"
             :src="scope.row.thumb"
             :preview-src-list="srcList"
-          >
-          </el-image>
+          ></el-image>
         </template>
       </el-table-column>
 
@@ -148,18 +147,18 @@
       <!-- 确认和取消按钮 -->
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="confirmEditProjectHandle"
-          >确 定</el-button
-        >
+        <el-button type="primary" @click="confirmEditProjectHandle">
+          确 定
+        </el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { getProject, setProject, delProject } from "@/api/project.js";
-import { server_URL } from "@/urlConfig.js";
-import Upload from "@/components/Upload.vue";
+import { getProject, setProject, delProject } from '@/api/project.js'
+// import { server_URL } from "@/urlConfig.js";
+import Upload from '@/components/Upload.vue'
 
 export default {
   data() {
@@ -169,76 +168,79 @@ export default {
       srcList: [],
       dialogFormVisible: false, // 一开始编辑对话框不可见
       form: {
-        name: "",
-        description: "",
-        url: "",
-        github: "",
-        thumb: "",
-        order: 1,
-      },
-    };
+        name: '',
+        description: '',
+        url: '',
+        github: '',
+        thumb: '',
+        order: 1
+      }
+    }
   },
   components: {
-    Upload,
+    Upload
   },
   created() {
-    this.fetchData();
+    this.fetchData()
   },
   methods: {
     fetchData() {
-      this.listLoading = true;
+      this.listLoading = true
       getProject().then(({ data }) => {
-        this.listLoading = false;
-        this.data = data;
+        this.listLoading = false
+        this.data = data
         for (let i of this.data) {
           // i.thumb2 = server_URL + i.thumb;
-          this.srcList.push(i.thumb2);
+          this.srcList.push(i.thumb2)
         }
-      });
+      })
     },
     openGitHubHandle(projectInfo) {
-        window.open(projectInfo.github);
+      window.open(projectInfo.github)
     },
     editProjectHandle(projectInfo) {
-      this.dialogFormVisible = true;
-      this.form = {...projectInfo, description : projectInfo.description.toString()}
+      this.dialogFormVisible = true
+      this.form = {
+        ...projectInfo,
+        description: projectInfo.description.toString()
+      }
     },
     deleteProjectHandle(projectInfo) {
-      this.$confirm("确定要删除此项目吗？", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
+      this.$confirm('确定要删除此项目吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       })
         .then(() => {
           delProject(projectInfo.id).then(() => {
-            this.fetchData();
+            this.fetchData()
             this.$message({
-              type: "success",
-              message: "删除成功!",
-            });
-          });
+              type: 'success',
+              message: '删除成功!'
+            })
+          })
         })
         .catch(() => {
           this.$message({
-            type: "info",
-            message: "已取消删除",
-          });
-        });
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
     },
     // 确认修改
     confirmEditProjectHandle() {
-        let obj = {...this.form};
-        obj.description = this.form.description.split(',');
-        obj.order = parseInt(this.form.order);
+      let obj = { ...this.form }
+      obj.description = this.form.description.split(',')
+      obj.order = parseInt(this.form.order)
 
-        setProject(obj.id, obj).then(()=>{
-            this.dialogFormVisible = false;
-            this.fetchData();
-            this.$message.success('修改成功');
-        })
-    },
-  },
-};
+      setProject(obj.id, obj).then(() => {
+        this.dialogFormVisible = false
+        this.fetchData()
+        this.$message.success('修改成功')
+      })
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

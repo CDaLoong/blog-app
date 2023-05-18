@@ -10,13 +10,13 @@
       highlight-current-row
     >
       <el-table-column align="center" label="序号" width="60">
-        <template slot-scope="scope">{{
-          scope.$index + (currentPage - 1) * eachPage + 1
-        }}</template>
+        <template slot-scope="scope">
+          {{ scope.$index + (currentPage - 1) * eachPage + 1 }}
+        </template>
       </el-table-column>
       <el-table-column label="头像" align="center" width="80">
         <template slot-scope="scope">
-           <el-avatar shape="square" size="small" :src="scope.row.avatar"></el-avatar>
+          <el-avatar shape="square" size="small" :src="scope.row.avatar" />
         </template>
       </el-table-column>
       <el-table-column label="昵称" align="center" width="150">
@@ -48,7 +48,7 @@
               circle
               size="mini"
               @click="deleteMessage(scope.row)"
-            ></el-button>
+            />
           </el-tooltip>
         </template>
       </el-table-column>
@@ -67,15 +67,14 @@
         @next-click="nextClickHandle"
         @current-change="currentChangeHandle"
         @size-change="handleSizeChange"
-      >
-      </el-pagination>
+      />
     </div>
   </div>
 </template>
 
 <script>
-import { getMessages, delMessage } from "@/api/message.js";
-import { formatDate } from "@/utils/tools";
+import { getMessages, delMessage } from '@/api/message.js'
+import { formatDate } from '@/utils/tools'
 export default {
   data() {
     return {
@@ -85,77 +84,75 @@ export default {
       totalPage: 0, // 总页数
       count: 0, // 数据总条数
       data: [], // 数据详情
-      pagerCurrentPage: 1, // 分页栏当前页码
-    };
+      pagerCurrentPage: 1 // 分页栏当前页码
+    }
   },
   created() {
-    this.fetchData();
+    this.fetchData()
   },
   methods: {
     fetchData() {
       getMessages(this.currentPage, this.eachPage).then(({ data }) => {
-        this.data = data.rows;
-        for(let i of this.data){
-          i.createDate = formatDate(i.createDate);
+        this.data = data.rows
+        for (const i of this.data) {
+          i.createDate = formatDate(i.createDate)
         }
-        this.count = data.total;
-        this.totalPage = Math.ceil(this.count / this.eachPage);
+        this.count = data.total
+        this.totalPage = Math.ceil(this.count / this.eachPage)
         if (this.currentPage > this.totalPage) {
-          this.currentPage = this.totalPage;
-          this.fetchData();
+          this.currentPage = this.totalPage
+          this.fetchData()
         }
-      });
+      })
     },
     // 删除留言
     deleteMessage({ id }) {
-      this.$confirm("是否删除此条留言信息?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
+      this.$confirm('是否删除此条留言信息?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       })
         .then(() => {
           this.$message({
-            type: "success",
-            message: "删除成功!",
-          });
+            type: 'success',
+            message: '删除成功!'
+          })
           delMessage(id).then((res) => {
-            console.log(res);
-            this.fetchData();
-          });
+            console.log(res)
+            this.fetchData()
+          })
         })
         .catch(() => {
           this.$message({
-            type: "info",
-            message: "已取消删除",
-          });
-        });
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
     },
     // 点击上一页，下一页，不用重新发送请求
     // 因为当前页码改变会触发 currentChangeHandle 事件，然后就会自动发送请求了
     // 点击上一页
     prevClickHandle() {
-      this.currentPage -= 1;
+      this.currentPage -= 1
     },
     // 点击下一页
     nextClickHandle() {
-      this.currentPage += 1;
+      this.currentPage += 1
     },
     // 点击页码
     currentChangeHandle(pageNum) {
-      this.currentPage = ~~pageNum;
-      this.fetchData();
+      this.currentPage = ~~pageNum
+      this.fetchData()
     },
     // 改变每页显示条数
     handleSizeChange(pagerNum) {
-      this.currentPage = 1;
-      this.pagerCurrentPage = 1; // 将分页组件重新回到第一页
-      this.eachPage = ~~pagerNum;
-      this.fetchData();
-    },
-  },
-};
+      this.currentPage = 1
+      this.pagerCurrentPage = 1 // 将分页组件重新回到第一页
+      this.eachPage = ~~pagerNum
+      this.fetchData()
+    }
+  }
+}
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

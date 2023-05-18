@@ -13,16 +13,15 @@ export function loginApi(data) {
 export function getInfo() {
   return request({
     url: '/api/admin/whoami',
-    method: 'get',
+    method: 'get'
   })
 }
 
-
 // 修改用户
-export function setUser(data){
+export function setUser(data) {
   return request({
-    url : '/api/admin',
-    method : 'PUT',
+    url: '/api/admin',
+    method: 'PUT',
     data
   })
 }

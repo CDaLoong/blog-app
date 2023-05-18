@@ -80,20 +80,17 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="editBannerConfirm"
-          >确 定</el-button
-        >
+        <el-button type="primary" @click="editBannerConfirm">确 定</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 
-
 <script>
-import { getBanner, setBanner } from "@/api/banner.js";
-import { server_URL } from "@/urlConfig.js";
+import { getBanner, setBanner } from '@/api/banner.js'
+// import { server_URL } from "@/urlConfig.js";
 // 引入封装好的上传图片组件
-import Upload from "@/components/Upload.vue";
+import Upload from '@/components/Upload.vue'
 
 export default {
   data() {
@@ -101,52 +98,51 @@ export default {
       data: [], // 存储数据
       dialogFormVisible: false, // 编辑对话框是否显示
       form: {
-        id: "",
-        midImg: "",
-        bigImg: "",
-        title: "",
-        description: "",
-      },
-    };
+        id: '',
+        midImg: '',
+        bigImg: '',
+        title: '',
+        description: ''
+      }
+    }
   },
   components: {
-    Upload,
+    Upload
   },
   created() {
-    this.fetchData();
+    this.fetchData()
   },
   methods: {
     fetchData() {
       getBanner().then((res) => {
-        this.data = res.data;
-      });
+        this.data = res.data
+      })
     },
     editBannerHandle(bannerInfo) {
       // 1. 将 bannerInfo 的数据给 form 2. 打开 dialog
-      this.form = { ...bannerInfo };
+      this.form = { ...bannerInfo }
 
-      this.dialogFormVisible = true;
+      this.dialogFormVisible = true
     },
-    editBannerConfirm(){
+    editBannerConfirm() {
       // 从表单里面拿到用户修改的数据，发送给服务器
-      let arr = [...this.data];
-      for(let i=0; i<arr.length; i++){
-        if(arr[i].id == this.form.id){
+      let arr = [...this.data]
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i].id == this.form.id) {
           arr[i] = this.form
         }
       }
-      setBanner(arr).then(res=>{
-        this.dialogFormVisible = false; // 关闭掉对话框
+      setBanner(arr).then((res) => {
+        this.dialogFormVisible = false // 关闭掉对话框
         this.$message({
           message: '修改成功',
           type: 'success'
-        });
-        this.fetchData();
+        })
+        this.fetchData()
       })
     }
-  },
-};
+  }
+}
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

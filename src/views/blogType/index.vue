@@ -19,8 +19,9 @@
         type="primary"
         style="margin-left: 10px"
         @click="addBlogTypeHandle"
-        >添加</el-button
       >
+        添加
+      </el-button>
     </div>
     <!-- 表格 -->
     <el-table :data="data" style="width: 100%" border>
@@ -91,9 +92,9 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="confirmEditBlogTypeHandle"
-          >确 定</el-button
-        >
+        <el-button type="primary" @click="confirmEditBlogTypeHandle">
+          确 定
+        </el-button>
       </div>
     </el-dialog>
   </div>
@@ -105,89 +106,89 @@ import {
   addBlogType,
   delBlogType,
   findOneBlogType,
-  updateOneBlogType,
-} from "@/api/blogType.js";
+  updateOneBlogType
+} from '@/api/blogType.js'
 export default {
   data() {
     return {
-      input: "",
-      select: "1",
+      input: '',
+      select: '1',
       listLoading: false,
       data: [],
-      dialogFormVisible : false,
-      form : {
-          name : '',
-          order : ''
+      dialogFormVisible: false,
+      form: {
+        name: '',
+        order: ''
       }
-    };
+    }
   },
   created() {
-    this.fetchData();
+    this.fetchData()
   },
   methods: {
     fetchData() {
-      this.listLoading = true;
+      this.listLoading = true
       getBlogType().then((res) => {
-        this.listLoading = false;
-        this.data = res.data;
-      });
+        this.listLoading = false
+        this.data = res.data
+      })
     },
     // 添加文章分类
     addBlogTypeHandle() {
       if (this.input) {
         addBlogType({ name: this.input, order: this.select }).then(() => {
-          this.fetchData();
-          this.$message.success("添加分类成功");
-        });
+          this.fetchData()
+          this.$message.success('添加分类成功')
+        })
       } else {
-        this.$message.error("分类名称不能为空");
+        this.$message.error('分类名称不能为空')
       }
     },
     // 编辑文章分类
-    editBlogTypeHandle({id}) {
-        // 1. 回填到表单    2. 打开 dialog
-        findOneBlogType(id).then(res=>{
-            this.form = res.data;
-            this.dialogFormVisible = true;
-        })
+    editBlogTypeHandle({ id }) {
+      // 1. 回填到表单    2. 打开 dialog
+      findOneBlogType(id).then((res) => {
+        this.form = res.data
+        this.dialogFormVisible = true
+      })
     },
     // 确认编辑文章分类
-    confirmEditBlogTypeHandle(){
-        updateOneBlogType({
-            id : this.form.id,
-            data : this.form
-        }).then(()=>{
-            this.fetchData();
-            this.$message.success('更新分类信息成功');
-            this.dialogFormVisible = false;
-        })
+    confirmEditBlogTypeHandle() {
+      updateOneBlogType({
+        id: this.form.id,
+        data: this.form
+      }).then(() => {
+        this.fetchData()
+        this.$message.success('更新分类信息成功')
+        this.dialogFormVisible = false
+      })
     },
     // 删除文章分类
     deleteBlogTypeHandle({ id }) {
       this.$confirm(
-        "删除该分类后，该分类下面的所有文章将变为未分类状态，是否继续?",
-        "是否删除此文章分类",
+        '删除该分类后，该分类下面的所有文章将变为未分类状态，是否继续?',
+        '是否删除此文章分类',
         {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning",
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
         }
       )
         .then(() => {
           delBlogType(id).then(() => {
-            this.fetchData();
-            this.$message.success("删除成功");
-          });
+            this.fetchData()
+            this.$message.success('删除成功')
+          })
         })
         .catch(() => {
           this.$message({
-            type: "info",
-            message: "已取消删除",
-          });
-        });
-    },
-  },
-};
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

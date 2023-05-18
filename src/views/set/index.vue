@@ -89,38 +89,38 @@
         <el-form-item label="网站标题">
           <el-input v-model="form2.siteTitle"></el-input>
         </el-form-item>
-         <el-form-item label="邮箱">
+        <el-form-item label="邮箱">
           <el-input v-model="form2.mail"></el-input>
         </el-form-item>
-         <el-form-item label="备案号">
+        <el-form-item label="备案号">
           <el-input v-model="form2.icp"></el-input>
         </el-form-item>
-         <el-form-item label="网站头像地址">
+        <el-form-item label="网站头像地址">
           <!-- <el-input v-model="form2.avatar"></el-input> -->
-          <Upload v-model="form2.avatar"/>
+          <Upload v-model="form2.avatar" />
         </el-form-item>
-         <el-form-item label="网站图标地址">
+        <el-form-item label="网站图标地址">
           <el-input v-model="form2.favicon"></el-input>
         </el-form-item>
-         <el-form-item label="github 名字">
+        <el-form-item label="github 名字">
           <el-input v-model="form2.githubName"></el-input>
         </el-form-item>
-         <el-form-item label="github 地址">
+        <el-form-item label="github 地址">
           <el-input v-model="form2.github"></el-input>
         </el-form-item>
-         <el-form-item label="QQ 号码">
+        <el-form-item label="QQ 号码">
           <el-input v-model="form2.qq"></el-input>
         </el-form-item>
-         <el-form-item label="QQ 二维码图片地址">
+        <el-form-item label="QQ 二维码图片地址">
           <!-- <el-input v-model="form2.qqQrCode"></el-input> -->
-          <Upload v-model="form2.qqQrCode"/>
+          <Upload v-model="form2.qqQrCode" />
         </el-form-item>
-         <el-form-item label="微信号">
+        <el-form-item label="微信号">
           <el-input v-model="form2.weixin"></el-input>
         </el-form-item>
-         <el-form-item label="微信二维码图片地址">
+        <el-form-item label="微信二维码图片地址">
           <!-- <el-input v-model="form2.weixinQrCode"></el-input> -->
-          <Upload v-model="form2.weixinQrCode"/>
+          <Upload v-model="form2.weixinQrCode" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -132,72 +132,72 @@
 </template>
 
 <script>
-import { getSetting, setSetting } from "@/api/setting.js";
+import { getSetting, setSetting } from '@/api/setting.js'
 import Upload from '@/components/Upload.vue'
-import { server_URL } from '@/urlConfig.js'
+// import { server_URL } from '@/urlConfig.js'
 export default {
   data() {
     return {
       form: {
-        avatar: "",
-        favicon: "",
-        github: "",
-        githubName: "",
-        icp: "",
-        id: "",
-        mail: "",
-        qq: "",
-        qqQrCode: "",
-        siteTitle: "",
-        weixin: "",
-        weixinQrCode: "",
+        avatar: '',
+        favicon: '',
+        github: '',
+        githubName: '',
+        icp: '',
+        id: '',
+        mail: '',
+        qq: '',
+        qqQrCode: '',
+        siteTitle: '',
+        weixin: '',
+        weixinQrCode: ''
       },
-      form2 : {
-        avatar: "",
-        favicon: "",
-        github: "",
-        githubName: "",
-        icp: "",
-        id: "",
-        mail: "",
-        qq: "",
-        qqQrCode: "",
-        siteTitle: "",
-        weixin: "",
-        weixinQrCode: "",
+      form2: {
+        avatar: '',
+        favicon: '',
+        github: '',
+        githubName: '',
+        icp: '',
+        id: '',
+        mail: '',
+        qq: '',
+        qqQrCode: '',
+        siteTitle: '',
+        weixin: '',
+        weixinQrCode: ''
       },
-      dialogFormVisible : false
-    };
+      dialogFormVisible: false
+    }
   },
-  components : {
+  components: {
     Upload
   },
   created() {
-    this.fetchData(); // 获取数据
+    this.fetchData() // 获取数据
   },
   methods: {
     fetchData() {
-      getSetting().then(res=>{
-        this.form = res.data;
+      getSetting().then((res) => {
+        this.form = res.data
         // 处理图片的链接
         // this.form.avatar2 = server_URL  + this.form.avatar;
         // this.form.qqQrCode2 = server_URL  + this.form.qqQrCode;
         // this.form.weixinQrCode2 = server_URL  + this.form.weixinQrCode;
-        this.form2 = {...this.form};
+        this.form2 = { ...this.form }
       })
     },
-    openEditPanel(){
-      this.dialogFormVisible = true;
+    openEditPanel() {
+      this.dialogFormVisible = true
     },
-    confirmEditSetting(){
-      setSetting(this.form2).then(()=>{
-        this.dialogFormVisible = false;
-        this.fetchData();
-        this.$message.success('修改成功！');
+    confirmEditSetting() {
+      setSetting(this.form2).then(() => {
+        this.dialogFormVisible = false
+        this.fetchData()
+        this.$message.success('修改成功！')
       })
     }
-  },
-};
+  }
+}
 </script>
 
 <style scoped>
